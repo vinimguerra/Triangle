@@ -17,6 +17,7 @@ public class Main implements Runnable {
 
     public void init() {
         window = new Window(WIDTH, HEIGHT, "Game");
+        window.setBackgroundColor(1.0f, 0, 0);
         window.create();
     }
 

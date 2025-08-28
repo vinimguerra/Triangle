@@ -2,6 +2,8 @@ package net.viniguerra.core;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 public class Window {
     private int width, height;
@@ -10,6 +12,7 @@ public class Window {
     public int frames;
     public static long time;
     public Input input;
+    private float backgroundR, backgroundG, backgoroundB;
 
     public Window(int width, int height, String title) {
         this.width = width;
@@ -34,6 +37,7 @@ public class Window {
         GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
         GLFW.glfwMakeContextCurrent(window);
+        GL.createCapabilities();
 
         GLFW.glfwSetKeyCallback(window, input.getKeyboardCallback());
         GLFW.glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
@@ -50,6 +54,8 @@ public class Window {
     }
 
     public void update() {
+        GL11.glClearColor(backgroundR, backgroundG, backgoroundB, 1.0f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         GLFW.glfwPollEvents();
         frames++;
         if (System.currentTimeMillis() > time + 1000) {
@@ -64,9 +70,20 @@ public class Window {
     }
 
     public boolean shouldClose() {
-        return false;
+        return GLFW.glfwWindowShouldClose(window);
     }
 
     public void destroy() {
+        input.destroy();
+        GLFW.glfwWindowShouldClose(window);
+        GLFW.glfwDestroyWindow(window);
+        GLFW.glfwTerminate();
+    }
+
+    public void setBackgroundColor(float r, float g, float b) {
+        backgroundR = r;
+        backgroundG = g;
+        backgoroundB = b;
+
     }
 }
