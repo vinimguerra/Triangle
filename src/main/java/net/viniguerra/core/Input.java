@@ -16,7 +16,9 @@ public class Input {
     public Input() {
         keyboard = new GLFWKeyCallback() {
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                keys[key] = (action != GLFW.GLFW_RELEASE);
+                if (key >= 0 && key < keys.length) {
+                    keys[key] = (action != GLFW.GLFW_RELEASE);
+                }
             }
         };
 
@@ -29,24 +31,26 @@ public class Input {
 
         mouseButtons = new GLFWMouseButtonCallback() {
             public void invoke(long window, int button, int action, int mods) {
-                buttons[button] = (action != GLFW.GLFW_RELEASE);
+                if (button >= 0 && button < buttons.length) {
+                    buttons[button] = (action != GLFW.GLFW_RELEASE);
+                }
             }
         };
 
         mouseScroll = new GLFWScrollCallback() {
-            public void invoke(long window, double xoffset, double yoffset) {
-                scrollX += xoffset;
-                scrollY += yoffset;
+            public void invoke(long window, double offsetx, double offsety) {
+                scrollX = offsetx;
+                scrollY = offsety;
             }
         };
     }
 
     public static boolean isKeyDown(int key) {
-        return keys[key];
+        return (key >= 0 && key < keys.length) && keys[key];
     }
 
     public static boolean isButtonDown(int button) {
-        return buttons[button];
+        return (button >= 0 && button < buttons.length) && buttons[button];
     }
 
     public void destroy() {
@@ -72,6 +76,11 @@ public class Input {
         return scrollY;
     }
 
+    public static void resetScroll() {
+        scrollX = 0;
+        scrollY = 0;
+    }
+
     public GLFWKeyCallback getKeyboardCallback() {
         return keyboard;
     }
@@ -84,7 +93,7 @@ public class Input {
         return mouseButtons;
     }
 
-    public GLFWScrollCallback getMouseScroll() {
+    public GLFWScrollCallback getMouseScrollCallback() {
         return mouseScroll;
     }
 }
