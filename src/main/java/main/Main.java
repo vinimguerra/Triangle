@@ -3,6 +3,7 @@ package main;
 import org.lwjgl.glfw.GLFW;
 import net.viniguerra.core.Input;
 import net.viniguerra.core.Window;
+import org.lwjgl.opengl.GL11;
 
 public class Main implements Runnable {
 
@@ -17,7 +18,7 @@ public class Main implements Runnable {
 
     private void init() {
         window = new Window(WIDTH, HEIGHT, "Game");
-        window.setBackgroundColor(1.0f, 0.0f, 0.0f);
+        window.setBackgroundColor(0.0f, 0.0f, 0.0f);
         window.create();
     }
 
@@ -25,7 +26,6 @@ public class Main implements Runnable {
     public void run() {
         init();
 
-        // loop principal
         while (!window.shouldClose() && !Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
             update();
             render();
@@ -43,6 +43,17 @@ public class Main implements Runnable {
     }
 
     private void render() {
+        org.lwjgl.opengl.GL11.glBegin(GL11.GL_TRIANGLES);
+        org.lwjgl.opengl.GL11.glColor3f(0.0f, 1.0f, 0.0f);
+        org.lwjgl.opengl.GL11.glVertex2f(-0.5f, -0.5f);
+
+        org.lwjgl.opengl.GL11.glColor3f(1.0f, 0.0f, 0.0f);
+        org.lwjgl.opengl.GL11.glVertex2f(0.5f, -0.5f);
+
+        org.lwjgl.opengl.GL11.glColor3f(0.0f, 0.0f, 1.0f);
+        org.lwjgl.opengl.GL11.glVertex2f(0.0f, 0.5f);
+        org.lwjgl.opengl.GL11.glEnd();
+
         window.swapBuffers();
     }
 
